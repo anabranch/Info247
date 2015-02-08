@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Student Grades</title>
+    <link rel="stylesheet" href="_css/main.css">
+    <script src="_js/jquery-1.11.0.min.js"></script>
+    <script src="_js/highcharts.js"></script>
+</head>
+<body>
+    <div id="line-chart">
+    </div>
+
+<script>
+
+// set up the initial options
+var options = {
+  chart: {
+    renderTo: "line-chart",
+    defaultSeriesType: "line"
+  },
+  title: {
+    text: 'Student Grades'
+  },
+  xAxis: {
+    categories: [
+      'Assignment 1',
+      'Assignment 2',
+      'Assignment 3',
+      'Assignment 4'
+    ]
+  },
+  yAxis: {
+    min: 60,
+    title: {
+      text: 'Grades'
+    }
+  },
+  legend: {
+    layout: 'vertical',
+    align: 'right',
+    verticalAlign: 'middle',
+    borderWidth: 0
+  },
+  series: []
+}
+
+
+
+// ajax call to data from the csv file
+$.get('_data/data.csv', function (data) {
+
+  // 1. split the csv by line ('\n')
+  var lines = data.split('\n');
+
+  // 2. loop through each line using $.each
+  $.each(lines, function(lineNo, line) {
+        
+    // 3. turn each line into an array that contains 4 items: name, grade #1, grade #2, grade #3; use the .split() method
+    var items = line.split(',');
+
+    // 4. skip the first line (since it's the header)
+    if (!(lineNo == 0)) {
+      
+      // 5. create a placeholder object which contains keys for "name" & "data"
+      var seriesData = {
+        name: "",
+        data: []
+      };    
+
+      // 6. grab the "seriesData" object and populate it with data from "items" 
+      seriesData.name = items[0];
+      seriesData.data.push(parseFloat(items[1]),parseFloat(items[2]),parseFloat(items[3]));
+
+      // 7. push "seriesData" into the main Highcharts options (which we set in the beginning of the script)
+      options.series.push(seriesData);
+    };
+
+  });
+
+  // finally draw the chart by creating a new "Highcharts" object, which has settings that are defined in "options"
+  var chart = new Highcharts.Chart(options);
+ 
+});
+
+</script>
+
+</body>
+</html>

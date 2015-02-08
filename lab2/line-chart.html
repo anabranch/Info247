@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Grades</title>
+  <link rel="stylesheet" href="_css/main.css">
+  <script src="_js/jquery-1.11.0.min.js"></script>
+  <script src="_js/highcharts.js"></script>
+</head>
+
+<body>
+  <div id="line-chart">
+  </div>
+
+  <script>
+    var data = {
+      Andy: [78, 96, 88],
+      Berry: [90, 82, 93],
+      Christina: [88, 91, 98],
+      David: [79, 92, 87]
+    };
+
+    $(function() {
+      $('#line-chart').highcharts({
+        chart: {
+          type: 'line',
+        },
+        title: {
+          text: 'Student Grades'
+        },
+        xAxis: {
+          categories: ['Assignment 1', 'Assignment 2', 'Assignment 3']
+        },
+        yAxis: {
+          min: 60,
+          max: 100,
+          title: {
+            text: "Grades"
+          }
+        },
+        // add in proper location for the legend
+        legend: {
+          align: 'right',
+          layout: 'vertical',
+          verticalAlign:'middle'
+        },
+        series: [{
+          name: 'Andy',
+          color: '#8F2F10',
+          data: [78, 96, 88]
+        }, {
+          name: 'Berry',
+          color: '#6DB3B3',
+          data: [90, 82, 93]
+        }, {
+          name: 'Christina',
+          color: '#E3CB46',
+          data: [88, 91, 98]
+        }, {
+          name: 'David',
+          color: '#8A2BE2',
+          data: [79, 92, 87]
+        }]
+      });
+    });
+  </script>
+
+</body>
+
+</html>

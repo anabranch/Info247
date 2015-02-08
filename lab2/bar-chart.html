@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Student Grades</title>
+    <link rel="stylesheet" href="_css/main.css">
+    <script src="_js/jquery-1.11.0.min.js"></script>
+    <script src="_js/highcharts.js"></script>
+</head>
+<body>
+    <div id="bar-chart">
+    </div>
+
+<script>
+$(function () {
+  $('#bar-chart').highcharts({
+    chart: {
+      type: 'column'
+    },
+    title: {
+      text: 'Student Grades'
+    },
+    xAxis: {
+      categories: [
+        'Andy',
+        'Betty',
+        'Christina',
+        'David'
+      ]
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: 'Grades'
+      }
+    },
+    tooltip: {
+      headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+      pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' + '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+      footerFormat: '</table>',
+      shared: false,
+      useHTML: true
+    },
+    plotOptions: {
+      column: {
+        pointPadding: 0.2,
+        borderWidth: 0
+      }
+    },
+    series: [{
+      color: '#8F2F10',
+      name: 'Assignment 1',
+      data: [78, 90, 88, 79],
+    }, {
+      color: '#6DB3B3',
+      name: 'Assignment 2',
+      data: [96, 82, 91, 92]
+    }, {
+      color: '#E3CB46',
+      name: 'Assignment 3',
+      data: [88, 93, 98, 87]
+    }]
+  });
+});
+</script>
+
+</body>
+</html>
