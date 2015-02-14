@@ -34,20 +34,17 @@ function colors(i) {
       return "Pink";
   };
 }
-var options = {
+var avgDayOptions = {
   chart: {
     type: 'bar',
-    marginLeft:150,
-    marginRight:50
   },
   title: {
     text: 'Average Days to Respond Per Category'
   },
+  legend: {
+    enabled: false,
+  },
   xAxis: {
-    // title: {
-    //   text: "Report Type",
-    //   rotation:270
-    // }
     title: {
       align: 'high',
       offset: 0,
@@ -56,35 +53,29 @@ var options = {
       y: -10
     }
   },
-  tooltip: {
-    formatter: function() {
-      return '<b>' + name + '</b><br/>' +
-        this.x + ': ' + this.y;
-    }
-  },
-  legend: {
-    enabled: false,
-    layout: 'vertical',
-    floating: true,
-    backgroundColor: '#FFFFFF',
-    align: 'right',
-    verticalAlign: 'top',
-    y: 60,
-    x: -60
-  },
-  series: []
+  yAxis: {
+    showEmpty: true,
+    labels: {
+      enabled: false
+    },
+    gridLineWidth: 0
+  }
 }
 
-
+// Average Days Set up
 $.getJSON("_data/avgdays.json", function(jsondata) {
   var cats = jsondata.map(function(val) {
     return val.name;
   });
 
-  var data = jsondata.map(function(val) {
+  var data = jsondata.map(function(val, i) {
     return {
       color: colors(val.name),
       y: val.data,
+      name: val.name,
+      dataLabels: {
+        enabled: true,
+      }
     }
   });
 
@@ -92,12 +83,13 @@ $.getJSON("_data/avgdays.json", function(jsondata) {
   var values = jsondata.map(function(val) {
     return val.data
   });
-  options.xAxis.categories = cats;
-  options.series = [{
-    data: values
+
+  avgDayOptions.xAxis.categories = cats;
+  avgDayOptions.series = [{
+    data: data
   }];
   console.log(cats);
-  console.log(options);
+  console.log(avgDayOptions);
 
-  $('#daystoclose').highcharts(options);
+  $('#daystoclose').highcharts(avgDayOptions);
 });
