@@ -1,31 +1,31 @@
 function colors(i) {
   switch (i) {
     case "IllegalDumping":
-      return "#1F77B4";
+      return "#e30000";
       break;
     case "BuildingMaintenance":
-      return "#DBDD8D";
+      return "#A7DBD8";
       break;
     case "Electrical":
-      return "#2CA02C";
+      return "#4285f4";
       break;
     case "StreetSweeping":
-      return "#D62728";
+      return "#F38630";
       break;
     case "RoadRepair":
-      return "#B23AEE";
+      return "#00ff7f";
       break;
     case "VegetationControl":
       return "#03070b";
       break;
     case "Graffiti":
-      return "#ffff66";
+      return "#768294";
       break;
     case "Survey":
-      return "#ff8d00";
+      return "#c0d530";
       break;
     case "Drainage":
-      return "#00ff7f";
+      return "#FA6900";
       break;
     case "StreetLights":
       return "#01aebf";
@@ -34,7 +34,6 @@ function colors(i) {
       return "Pink";
   };
 }
-
 
 var groupData = function(data, col) {
   var groups = {};
@@ -119,8 +118,7 @@ $.getJSON("_data/avgdays.json", function(jsondata) {
 
 var overTimeOptions = function() {
   return {
-    chart: {
-    },
+    chart: {},
     title: {
       text: 'Total Number of Complaints by Type'
     },
@@ -246,4 +244,3 @@ $.get("_data/cityfixitdata.csv", function(data) {
   console.log(series);
   $('#comp2').highcharts(otOp);
 });
-
