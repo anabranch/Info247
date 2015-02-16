@@ -120,7 +120,6 @@ $.getJSON("_data/avgdays.json", function(jsondata) {
 var overTimeOptions = function() {
   return {
     chart: {
-      type: 'column'
     },
     title: {
       text: 'Total Number of Complaints by Type'
@@ -135,11 +134,6 @@ var overTimeOptions = function() {
         text: 'Problem Type',
         rotation: 0,
         y: -10
-      }
-    },
-    plotOptions: {
-      column: {
-        stacking: 'normal'
       }
     },
     yAxis: {}
@@ -179,18 +173,17 @@ $.get("_data/cityfixitdata.csv", function(data) {
     for (var year in year_data) {
       intTotal = parseInt(year_data[year][i][num_index]);
       intFromApp = intTotal * parseFloat(year_data[year][i][app_index]) / 100;
-      total.push(intTotal - intFromApp);
+      total.push(intTotal);
       fromApp.push(intFromApp);
     }
     series.push({
-      name: 'Not From App',
-      stack: year_data[2009][i][prob_index],
+      name: year_data[2009][i][prob_index],
       color: colors(year_data[2009][i][prob_index]),
       data: total
     });
     series.push({
-      name: 'From App',
-      stack: year_data[2009][i][prob_index],
+      name: year_data[2009][i][prob_index],
+      dashStyle: 'longdash',
       color: colors(year_data[2009][i][prob_index]),
       data: fromApp
     });
@@ -199,7 +192,6 @@ $.get("_data/cityfixitdata.csv", function(data) {
   console.log(series);
   $('#comp1').highcharts(otOp);
 });
-
 
 
 $.get("_data/cityfixitdata.csv", function(data) {
@@ -235,18 +227,17 @@ $.get("_data/cityfixitdata.csv", function(data) {
     for (var year in year_data) {
       intTotal = parseInt(year_data[year][i][num_index]);
       intFromApp = intTotal * parseFloat(year_data[year][i][app_index]) / 100;
-      total.push(intTotal - intFromApp);
+      total.push(intTotal);
       fromApp.push(intFromApp);
     }
     series.push({
-      name: 'Not From App',
-      stack: year_data[2009][i][prob_index],
+      name: year_data[2009][i][prob_index],
       color: colors(year_data[2009][i][prob_index]),
       data: total
     });
     series.push({
-      name: 'From App',
-      stack: year_data[2009][i][prob_index],
+      name: year_data[2009][i][prob_index],
+      dashStyle: 'longdash',
       color: colors(year_data[2009][i][prob_index]),
       data: fromApp
     });
@@ -255,3 +246,4 @@ $.get("_data/cityfixitdata.csv", function(data) {
   console.log(series);
   $('#comp2').highcharts(otOp);
 });
+
