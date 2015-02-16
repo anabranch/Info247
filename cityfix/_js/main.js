@@ -13,7 +13,9 @@ var splitCsv = function(data) {
 var avgDayOptions = {
   chart: {
     type: 'bar',
-    marginLeft: 120
+    marginLeft: 120,
+    height:400,
+    width:600
   },
   title: {
     text: 'Average Days to Respond Per Category'
@@ -72,7 +74,9 @@ $.getJSON("_data/avgdays.json", function(jsondata) {
 var overTimeOptions = function() {
   return {
     chart: {
-      type: 'column'
+      type: 'column',
+      width:300,
+      height:400
     },
     title: {
       text: 'Total Number of Complaints by Type'
