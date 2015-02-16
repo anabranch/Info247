@@ -61,15 +61,10 @@ table {
 /* CONTENT */
 
 #container {
-  height: 600px; 
-  width: 40%;
+  height: 800px; 
+  width: 600px;
 }
 
-.chart {
-  height: 300px; 
-  width: 46%;
-  padding: 2%;
-}
 
 #over1000 {
     float: left;
