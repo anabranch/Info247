@@ -13,7 +13,7 @@ function colors(i) {
       return "#F38630";
       break;
     case "RoadRepair":
-      return "#FA6900";
+      return "#00ff7f";
       break;
     case "VegetationControl":
       return "#03070b";
@@ -25,7 +25,7 @@ function colors(i) {
       return "#c0d530";
       break;
     case "Drainage":
-      return "#00ff7f";
+      return "#FA6900";
       break;
     case "StreetLights":
       return "#01aebf";
@@ -34,7 +34,6 @@ function colors(i) {
       return "Pink";
   };
 }
-
 var splitCsv = function(data) {
   var lines = data
     .split("\n");
