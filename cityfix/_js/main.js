@@ -13,12 +13,12 @@ var splitCsv = function(data) {
 var avgDayOptions = {
   chart: {
     type: 'bar',
-    marginLeft: 120,
-    height:400,
-    width:600
+    marginLeft: 125,
+    height:550,
+    width:320,
   },
   title: {
-    text: 'Average Days to Respond Per Category'
+    text: 'Average Days to Respond'
   },
   legend: {
     enabled: false,
@@ -27,7 +27,7 @@ var avgDayOptions = {
     title: {
       align: 'high',
       offset: 0,
-      text: 'Problem Type',
+      text: '',
       rotation: 0,
       y: -10
     }
@@ -45,9 +45,12 @@ var avgDayOptions = {
 // Average Days Set up
 $.getJSON("_data/avgdays.json", function(jsondata) {
   // Get our Series Categories
+  jsondata.sort(function(a,b){return a.data-b.data;});
+  jsondata.reverse();
   var cats = jsondata.map(function(val) {
     return val.name;
   });
+  console.log(cats);
   // Map the data to a better series format
   var data = jsondata.map(function(val, i) {
     return {
@@ -59,6 +62,8 @@ $.getJSON("_data/avgdays.json", function(jsondata) {
       }
     }
   });
+  console.log(data);
+
 
   // Set our options
   avgDayOptions.xAxis.categories = cats;
@@ -71,24 +76,27 @@ $.getJSON("_data/avgdays.json", function(jsondata) {
 
 // handle comparison graphs
 
-var overTimeOptions = function() {
+var overTimeOptions = function(title) {
   return {
     chart: {
       type: 'column',
-      width:300,
-      height:400
+      width:480,
+      height:250
     },
     title: {
-      text: 'Total Number of Complaints by Type'
+      text: title
     },
     legend: {
-      enabled: false,
+      enabled: true,
+      itemStyle:{
+          fontSize: "6pt"
+      }
     },
     xAxis: {
       title: {
         align: 'high',
         offset: 0,
-        text: 'Problem Type',
+        //text: 'Problem Type',
         rotation: 0,
         y: -10
       }
@@ -98,14 +106,16 @@ var overTimeOptions = function() {
         stacking: 'normal'
       }
     },
-    yAxis: {}
+    yAxis: {
+        title:{text:"# Requests"}
+    }
   };
 };
 
 $.get("_data/cityfixitdata.csv", function(data) {
   // split the csv by line("\n"), remove header, sort
   var csv = splitCsv(data);
-  var otOp = overTimeOptions();
+  var otOp = overTimeOptions("High Frequency Requests");
 
   var year_index = csv.headers.indexOf('Year');
   var prob_index = csv.headers.indexOf('ProblemType');
@@ -139,15 +149,17 @@ $.get("_data/cityfixitdata.csv", function(data) {
       fromApp.push(intFromApp);
     }
     series.push({
-      name: 'Not From App',
+      name: year_data[2009][i][prob_index],
+      id: year_data[2009][i][prob_index],
       stack: year_data[2009][i][prob_index],
       color: colors(year_data[2009][i][prob_index]),
       data: total
     });
     series.push({
-      name: 'From App',
+      name: year_data[2009][i][prob_index],
+      linkedTo: year_data[2009][i][prob_index],
       stack: year_data[2009][i][prob_index],
-      color: colors(year_data[2009][i][prob_index]),
+      color: "black",
       data: fromApp
     });
   }
@@ -161,7 +173,7 @@ $.get("_data/cityfixitdata.csv", function(data) {
 $.get("_data/cityfixitdata.csv", function(data) {
   // split the csv by line("\n"), remove header, sort
   var csv = splitCsv(data);
-  var otOp = overTimeOptions();
+  var otOp = overTimeOptions("Low Frequency Requests");
 
   var year_index = csv.headers.indexOf('Year');
   var prob_index = csv.headers.indexOf('ProblemType');
@@ -195,17 +207,20 @@ $.get("_data/cityfixitdata.csv", function(data) {
       fromApp.push(intFromApp);
     }
     series.push({
-      name: 'Not From App',
+      name: year_data[2009][i][prob_index],
+      id: year_data[2009][i][prob_index],
       stack: year_data[2009][i][prob_index],
       color: colors(year_data[2009][i][prob_index]),
       data: total
     });
     series.push({
-      name: 'From App',
+      name: year_data[2009][i][prob_index],
+      linkedTo: year_data[2009][i][prob_index],
       stack: year_data[2009][i][prob_index],
-      color: colors(year_data[2009][i][prob_index]),
+      color: "black",
       data: fromApp
     });
+
   }
   otOp.series = series;
   console.log(series);
