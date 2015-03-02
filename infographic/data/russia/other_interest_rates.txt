@@ -1,0 +1,80 @@
+<table style="width:412px;border:1px solid #CCCCCC;" cellpadding="2" cellspacing="0">
+  <tbody><tr class="tableheader">
+  <td style="width:40%">&nbsp;central bank interest rate</td>
+  <td style="width:22%">region</td>
+  <td style="width:20%" align="center">percentage</td>
+  <td style="width:18%">date</td>
+  </tr>
+  
+  
+  <tr class="tabledata1">
+  <td>&nbsp;<a href="/interest-rates/central-banks/central-bank-america/fed-interest-rate.aspx" title="United States FED Federal Funds Rate - American central bank’s interest rate">FED interest rate</a></td>
+  <td>United States</td>
+  <td align="center">0.250&nbsp;%</td>
+  <td>12-16-2008</td>
+  </tr>
+  
+  <tr class="tabledata2">
+  <td>&nbsp;<a href="/interest-rates/central-banks/central-bank-australia/rba-interest-rate.aspx" title="RBA Official Cash Rate - Australian central bank’s interest rate">RBA interest rate</a></td>
+  <td>Australia</td>
+  <td align="center">2.250&nbsp;%</td>
+  <td>02-03-2015</td>
+  </tr>
+  
+  <tr class="tabledata1">
+  <td>&nbsp;<a href="/interest-rates/central-banks/central-bank-brazil/bacen-interest-rate.aspx" title="BACEN SELIC rate - Brazilian central bank’s interest rate">BACEN interest rate</a></td>
+  <td>Brazil</td>
+  <td align="center">12.250&nbsp;%</td>
+  <td>01-21-2015</td>
+  </tr>
+  
+  <tr class="tabledata2">
+  <td>&nbsp;<a href="/interest-rates/central-banks/central-bank-england/boe-interest-rate.aspx" title="BoE Official Bank Rate - British central bank’s interest rate England">BoE interest rate</a></td>
+  <td>Great Britain</td>
+  <td align="center">0.500&nbsp;%</td>
+  <td>03-05-2009</td>
+  </tr>
+  
+  <tr class="tabledata1">
+  <td>&nbsp;<a href="/interest-rates/central-banks/central-bank-canada/boc-interest-rate.aspx" title="BOC key interest rate - Canadian central bank’s interest rate">BOC interest rate</a></td>
+  <td>Canada</td>
+  <td align="center">0.750&nbsp;%</td>
+  <td>01-21-2015</td>
+  </tr>
+  
+  <tr class="tabledata2">
+  <td>&nbsp;<a href="/interest-rates/central-banks/central-bank-china/pbc-interest-rate.aspx" title="PBC central bank base interest rate - Chinese central bank’s interest rate">PBC interest rate</a></td>
+  <td>China</td>
+  <td align="center">5.600&nbsp;%</td>
+  <td>11-21-2014</td>
+  </tr>
+  
+  <tr class="tabledata1">
+  <td>&nbsp;<a href="/interest-rates/central-banks/european-central-bank/ecb-interest-rate.aspx" title="ECB refi rate - European Central Bank’s interest rate">ECB interest rate</a></td>
+  <td>Europe</td>
+  <td align="center">0.050&nbsp;%</td>
+  <td>09-04-2014</td>
+  </tr>
+  
+  <tr class="tabledata2">
+  <td>&nbsp;<a href="/interest-rates/central-banks/central-bank-japan/boj-interest-rate.aspx" title="BoJ overnight call rate - Japanese central bank’s interest rates">BoJ interest rate</a></td>
+  <td>Japan</td>
+  <td align="center">0.100&nbsp;%</td>
+  <td>10-05-2010</td>
+  </tr>
+  
+  <tr class="tabledata1">
+  <td>&nbsp;<a href="/interest-rates/central-banks/central-bank-russia/cbr-interest-rate.aspx" title="CBR refinancing rate - Russian central bank’s interest rate">CBR interest rate</a></td>
+  <td>Russia</td>
+  <td align="center">15.000&nbsp;%</td>
+  <td>01-30-2015</td>
+  </tr>
+  
+  <tr class="tabledata2">
+  <td>&nbsp;<a href="/interest-rates/central-banks/central-bank-south-africa/sarb-interest-rate.aspx" title="SARB repo rate - South African central bank’s interest rate ">SARB interest rate</a></td>
+  <td>South Africa</td>
+  <td align="center">5.750&nbsp;%</td>
+  <td>07-17-2014</td>
+  </tr>
+  
+  </tbody></table>
