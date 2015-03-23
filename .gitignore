@@ -1,4 +1,5 @@
 *.zip
 *.ipynb_checkpoints
 *.swp
+/SFPD_data
 

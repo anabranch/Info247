@@ -1,0 +1,66 @@
+/********** Demonstration **********/
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+/*svg{
+	border: 1px solid black;
+}*/
+
+.tick{
+  font-size: .7em;
+}
+
+/********** Base **********/
+.active{
+	color: cornflowerblue;
+}
+.content-container {
+	width: 90%;
+	margin: 0 auto;
+}
+header{
+	padding-top: 1.45em;
+}
+.inline-menu{
+color: gray;
+}
+.inline-menu .menu-item {
+	margin-top: 0;
+}
+
+/********** Typography **********/
+
+html {font-size: 1em;}
+
+body {
+  background-color: white;
+  font-weight: 400;
+  line-height: 1.45;
+  color: #333;
+}
+
+p {margin-bottom: 1.3em;}
+
+h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
+  margin: 1.414em 0 0.5em;
+  font-weight: inherit;
+  line-height: 1.2;
+}
+
+h1, .h1 {
+  margin-top: 0;
+  font-size: 3.157em;
+}
+
+h2, .h2 {font-size: 2.369em;}
+
+h3, .h3 {font-size: 1.777em;}
+
+h4, .h4 {font-size: 1.333em;}
+
+small, .font_small {font-size: 0.75em;}

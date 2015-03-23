@@ -1,0 +1,12 @@
+Bill Chambers
+Info 247 - EDA Reviews
+
+
+Xavier:
+
+I thought that Xavier did a great job with this EDA. His process and development is crystal clear and he took great notes along the way. It also leaves breadcrumbs for those of us in the future that are looking to do similar work - something that provides great value and makes it repeatable. I think it’s particularly powerful that he posed his hypothesis in very direct terms, something I didn’t see in all the other write ups. His strength is in his documentation and willingness to experiment. The only weakness might be the black map which is just such a bold shape that it’s a bit distracting because it sticks out so much. I feel like he could have just kept it similar to the other one and would really be able to have the same effect (more or less). His color choice felt a little strange as well - bright light being yellow is clear - but the rest of them could be higher contrast colors to make them stick out a bit more. Overall really like the way this one progressed.
+
+
+Faye:
+
+Faye seemed to approach this in a much different way than Xavier did. She built these dashboards to answer particular questions effectively and I did not really feel like she achieved that particularly well. Her first question was answered by the dashboard but I felt that the question wasn’t very specific. The bubble map also left me confused, as I don’t know the names bart unions. This meant I looked at it, tried to figure out how it answered the question then just skipped over it because I didn’t understand it. I had to read her analysis to fully grasp that those were bart Unions. The number of manager’s dashboard was also a bit unclear, as percentages in departments are largely irrelevant because not all departments are likely to have the same number of managers. Her third dashboard/question was my favorite. I thought she did a fantastic job showing that there are definitely some significant outliers that warranted further investigation. It was a lot easier to ask the follow up question of “wait, what’s going on in finance”. Overall I thought it lacked a little coherence in the beginning but was much stronger towards the end - likely an inevitability in the EDA process.
