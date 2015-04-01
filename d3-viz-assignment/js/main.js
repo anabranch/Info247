@@ -1,4 +1,3 @@
-
 var filename = "/data/running_data.json";
 // columns = lengths
 // rows = days
@@ -18,14 +17,14 @@ var mtx = [
 
 var height = 600;
 var width = 600;
-var colorRange = [];
+var colorRange = ["#1a9850","#d73027", "#fc8d59", "#fee08b", "#ffffbf", "#d9ef8b", "#91cf60", ];
 
 var fill = d3.scale.ordinal()
   .domain(d3.range(colorRange.length))
   .range(colorRange);
 
 var outerRadius = Math.min(width, height) / 2 - 8,
-  innerRadius = outerRadius - 20;
+  innerRadius = outerRadius - 30;
 
 var arc = d3.svg.arc()
   .innerRadius(innerRadius)
@@ -65,6 +64,6 @@ svg.append("g")
   .data(layout.chords)
   .enter().append("path")
   .style("fill", function(d) {
-    return "#333";
+    return fill(d.target.index);
   })
   .attr("d", d3.svg.chord().radius(innerRadius));
