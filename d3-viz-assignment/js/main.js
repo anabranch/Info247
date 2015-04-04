@@ -1,6 +1,6 @@
 var url = "/data/matrix.json",
-  height = 600;
-var width = 600;
+  height = 800;
+var width = 800;
 
 // Colors Can be substituted to preference, in many ways less colors makes it nice...
 var colorRange = ["#1a9850", "#d73027", "#fc8d59", "#fee08b", "#ffffbf", "#d9ef8b", "#91cf60"];
@@ -23,32 +23,47 @@ var svg = d3.select('#chart')
   .attr('height', height)
   .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+
+function fadeChords(opacity) {
+  return function(g, i) {
+
+    var sources = svg.selectAll("g.chord path")
+      .filter(function(d) {
+        return d.source.index != i && d.target.index != i;
+      })
+      .transition()
+      .style("opacity", opacity);
+
+  }
+}
+
+
 $.getJSON(url, function(data) {
-
-
   var layout = d3.layout.chord()
-    .padding(.04)
+    .padding(.02) // feasibly could put a sort right here
     .matrix(data);
-
 
   svg.append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+    .attr("class", "groups animate")
     .selectAll("path")
     .data(layout.groups)
     .enter()
     .append("path")
-    .style("fill", function(d, i) {
+    .style("fill", function(d) {
       return fill(d.index);
     })
     .style("stroke", function(d) {
       return fill(d.index);
     })
-    .attr("d", arc);
+    .attr("d", arc)
+    .on("mouseover", fadeChords(0.05))
+    .on("mouseout", fadeChords(1));
 
 
   svg.append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-    .attr("class", "chord")
+    .attr("class", "chord animate")
     .selectAll("path")
     .data(layout.chords)
     .enter().append("path")
