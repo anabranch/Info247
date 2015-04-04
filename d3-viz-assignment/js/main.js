@@ -23,12 +23,13 @@ var svg = d3.select('#chart')
   .attr('height', height)
   .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+
 function fadeChords(opacity, layout) {
   return function(g, i) {
 
     var selected, notSelected, sourceNodes = [],
       targetNodes = [],
-      excludedNodes, excludedGroups;
+      includedNodes, excludedGroups;
 
     selected = svg.selectAll("g.chord path")
       .filter(function(d) {
@@ -56,11 +57,11 @@ function fadeChords(opacity, layout) {
       var temp = d.target.index == i ? targetNodes.push(d.source.index) : undefined;
     });
 
-    excludedNodes = sourceNodes.concat(targetNodes, [i]);
+    includedNodes = sourceNodes.concat(targetNodes, [i]);
 
     excludedGroups = svg.selectAll("g.group path")
       .filter(function(d, count) {
-        return !($.inArray(count, excludedNodes) > -1);
+        return !($.inArray(count, includedNodes) > -1);
       });
 
     excludedGroups
@@ -82,6 +83,54 @@ function genSubChart(matrix) {
     .innerRadius(innerRadius)
     .outerRadius(outerRadius);
 
+
+  var svg = d3.select('#subchart')
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height)
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+}
+
+function filterMatrix(nodes, matrix) {
+  var newMatrix = matrix
+    .map(function(d, i) {
+      return filterArray(nodes, d);
+    })
+  return filterArray(nodes, newMatrix);
+}
+
+function filterArray(nodes, array) {
+  return array.filter(function(d, i) {
+    return ($.inArray(i, nodes) > -1);
+  });
+}
+
+function airportClick(matrix) {
+  return function(g, i) {
+    var selected, notSelected, sourceNodes = [],
+      targetNodes = [],
+      includedNodes, excludedGroups;
+
+    selected = svg.selectAll("g.chord path")
+      .filter(function(d) {
+        return d.source.index == i || d.target.index == i;
+      });
+    // is our node targeting this node?
+    selected.each(function(d) {
+      var temp = d.source.index == i ? sourceNodes.push(d.target.index) : undefined;
+    });
+
+    // is the node targeting our source node?
+    selected.each(function(d) {
+      var temp = d.target.index == i ? targetNodes.push(d.source.index) : undefined;
+    });
+
+    includedNodes = sourceNodes.concat(targetNodes, [i]);
+
+    console.log(filterMatrix(includedNodes, matrix));
+
+  }
 }
 
 $.getJSON(url, function(data) {
@@ -104,7 +153,8 @@ $.getJSON(url, function(data) {
     })
     .attr("d", arc)
     .on("mouseover", fadeChords(0, layout))
-    .on("mouseout", fadeChords(1, layout));
+    .on("mouseout", fadeChords(1, layout))
+    .on("click", airportClick(data));
 
 
   svg.append("g")
