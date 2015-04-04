@@ -28,7 +28,7 @@ function fadeChords(opacity, layout) {
 
     var selected, notSelected, sourceNodes = [],
       targetNodes = [],
-      excludedNodes, groups;
+      excludedNodes, excludedGroups;
 
     selected = svg.selectAll("g.chord path")
       .filter(function(d) {
@@ -39,13 +39,12 @@ function fadeChords(opacity, layout) {
       .filter(function(d) {
         return d.source.index != i && d.target.index != i;
       });
- // Turn off the irrelevant paths
+    // Turn off the irrelevant paths
     notSelected
       .transition()
       .style({
         "opacity": opacity
       });
-
 
     // is our node targeting this node?
     selected.each(function(d) {
@@ -57,19 +56,14 @@ function fadeChords(opacity, layout) {
       var temp = d.target.index == i ? targetNodes.push(d.source.index) : undefined;
     });
 
-
     excludedNodes = sourceNodes.concat(targetNodes, [i]);
 
-    console.log(excludedNodes);
-
-    groups = svg.selectAll("g.group path")
+    excludedGroups = svg.selectAll("g.group path")
       .filter(function(d, count) {
         return !($.inArray(count, excludedNodes) > -1);
       });
 
-    console.log(groups);
-
-    groups
+    excludedGroups
       .transition()
       .style({
         "opacity": opacity
@@ -87,6 +81,7 @@ function genSubChart(matrix) {
   var arc = d3.svg.arc()
     .innerRadius(innerRadius)
     .outerRadius(outerRadius);
+
 }
 
 $.getJSON(url, function(data) {
