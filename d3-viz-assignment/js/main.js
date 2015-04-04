@@ -10,8 +10,6 @@ var fill = d3.scale.ordinal()
 
 var fill = d3.scale.category20b();
 
-
-
 var outerRadius = Math.min(width, height) / 2 - 8,
   innerRadius = outerRadius - 30;
 
@@ -39,50 +37,52 @@ function fadeChords(opacity) {
         return d.source.index != i && d.target.index != i;
       });
 
-
-
-
     notSelected
       .transition()
       .style({
         "opacity": opacity
       });
 
+      console.log(selected);
+      console.log(notSelected);
   }
 }
 
+d3.csv('data/airports.csv', function(airports) {
+  d3.json(url, function(data) {
+    var layout = d3.layout.chord()
+      .padding(.02) // feasibly could put a sort right here
+      .matrix(data);
 
-$.getJSON(url, function(data) {
-  var layout = d3.layout.chord()
-    .padding(.02) // feasibly could put a sort right here
-    .matrix(data);
+    console.log(airports);
 
-  svg.append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-    .attr("class", "group animate")
-    .selectAll("path")
-    .data(layout.groups)
-    .enter()
-    .append("path")
-    .style("fill", function(d) {
-      return fill(d.index);
-    })
-    .style("stroke", function(d) {
-      return fill(d.index);
-    })
-    .attr("d", arc)
-    .on("mouseover", fadeChords(0))
-    .on("mouseout", fadeChords(1));
+    svg.append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+      .attr("class", "group animate")
+      .selectAll("path")
+      .data(layout.groups)
+      .enter()
+      .append("path")
+      .style("fill", function(d) {
+        return fill(d.index);
+      })
+      .style("stroke", function(d) {
+        return fill(d.index);
+      })
+      .attr("d", arc)
+      .on("mouseover", fadeChords(0))
+      .on("mouseout", fadeChords(1));
 
+    svg.append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+      .attr("class", "chord animate")
+      .selectAll("path")
+      .data(layout.chords)
+      .enter().append("path")
+      .style("fill", function(d) {
+        return fill(d.target.index);
+      })
+      .attr("d", d3.svg.chord().radius(innerRadius));
+  });
 
-  svg.append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-    .attr("class", "chord animate")
-    .selectAll("path")
-    .data(layout.chords)
-    .enter().append("path")
-    .style("fill", function(d) {
-      return fill(d.target.index);
-    })
-    .attr("d", d3.svg.chord().radius(innerRadius));
 });
