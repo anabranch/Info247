@@ -27,7 +27,7 @@ var svg = d3.select('#chart')
 
 function fadeChords(opacity) {
   return function(g, i) {
-    var selected, notSelected, selectedStyles, SelectedFilter;
+    var selected, notSelected;
 
     selected = svg.selectAll("g.chord path")
       .filter(function(d) {
