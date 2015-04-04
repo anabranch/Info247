@@ -1,6 +1,6 @@
 var url = "/data/matrix.json",
-  height = 600;
-var width = 600;
+  height = 627;
+var width = 627;
 
 // Colors Can be substituted to preference, in many ways less colors makes it nice...
 var colorRange = ["#1a9850", "#d73027", "#fc8d59", "#fee08b", "#ffffbf", "#d9ef8b", "#91cf60"];
@@ -23,9 +23,12 @@ var svg = d3.select('#chart')
   .attr('height', height)
   .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-function fadeChords(opacity) {
+function fadeChords(opacity, layout) {
   return function(g, i) {
-    var selected, notSelected;
+
+    var selected, notSelected, sourceNodes = [],
+      targetNodes = [],
+      excludedNodes, groups;
 
     selected = svg.selectAll("g.chord path")
       .filter(function(d) {
@@ -36,53 +39,87 @@ function fadeChords(opacity) {
       .filter(function(d) {
         return d.source.index != i && d.target.index != i;
       });
-
+ // Turn off the irrelevant paths
     notSelected
       .transition()
       .style({
         "opacity": opacity
       });
 
-      console.log(selected);
-      console.log(notSelected);
-  }
+
+    // is our node targeting this node?
+    selected.each(function(d) {
+      var temp = d.source.index == i ? sourceNodes.push(d.target.index) : undefined;
+    });
+
+    // is the node targeting our source node?
+    selected.each(function(d) {
+      var temp = d.target.index == i ? targetNodes.push(d.source.index) : undefined;
+    });
+
+
+    excludedNodes = sourceNodes.concat(targetNodes, [i]);
+
+    console.log(excludedNodes);
+
+    groups = svg.selectAll("g.group path")
+      .filter(function(d, count) {
+        return !($.inArray(count, excludedNodes) > -1);
+      });
+
+    console.log(groups);
+
+    groups
+      .transition()
+      .style({
+        "opacity": opacity
+      });
+
+
+  };
 }
 
-d3.csv('data/airports.csv', function(airports) {
-  d3.json(url, function(data) {
-    var layout = d3.layout.chord()
-      .padding(.02) // feasibly could put a sort right here
-      .matrix(data);
+function genSubChart(matrix) {
+  var width = 297,
+    height = 297;
+  var outerRadius = Math.min(width, height) / 2 - 8,
+    innerRadius = outerRadius - 30;
+  var arc = d3.svg.arc()
+    .innerRadius(innerRadius)
+    .outerRadius(outerRadius);
+}
 
-    console.log(airports);
+$.getJSON(url, function(data) {
+  var layout = d3.layout.chord()
+    .padding(.02) // feasibly could put a sort right here
+    .matrix(data);
 
-    svg.append("g")
-      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-      .attr("class", "group animate")
-      .selectAll("path")
-      .data(layout.groups)
-      .enter()
-      .append("path")
-      .style("fill", function(d) {
-        return fill(d.index);
-      })
-      .style("stroke", function(d) {
-        return fill(d.index);
-      })
-      .attr("d", arc)
-      .on("mouseover", fadeChords(0))
-      .on("mouseout", fadeChords(1));
+  svg.append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+    .attr("class", "group animate")
+    .selectAll("path")
+    .data(layout.groups)
+    .enter()
+    .append("path")
+    .style("fill", function(d) {
+      return fill(d.index);
+    })
+    .style("stroke", function(d) {
+      return fill(d.index);
+    })
+    .attr("d", arc)
+    .on("mouseover", fadeChords(0, layout))
+    .on("mouseout", fadeChords(1, layout));
 
-    svg.append("g")
-      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-      .attr("class", "chord animate")
-      .selectAll("path")
-      .data(layout.chords)
-      .enter().append("path")
-      .style("fill", function(d) {
-        return fill(d.target.index);
-      })
-      .attr("d", d3.svg.chord().radius(innerRadius));
-  });
 
+  svg.append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+    .attr("class", "chord animate")
+    .selectAll("path")
+    .data(layout.chords)
+    .enter().append("path")
+    .style("fill", function(d) {
+      return fill(d.target.index);
+    })
+    .attr("d", d3.svg.chord().radius(innerRadius));
 });
