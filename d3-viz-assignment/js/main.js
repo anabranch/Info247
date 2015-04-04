@@ -25,9 +25,9 @@ var svg = d3.select('#chart')
   .attr('height', height)
   .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-function fadeChords(opacity) {
+function fadeChords(opacity, data) {
   return function(g, i) {
-    var selected, notSelected, selectedStyles, SelectedFilter;
+    var selected, notSelected, nonSelectIndexes;
 
     selected = svg.selectAll("g.chord path")
       .filter(function(d) {
@@ -39,16 +39,36 @@ function fadeChords(opacity) {
         return d.source.index != i && d.target.index != i;
       });
 
+    nonSelectIndexes = data[i]
+      .map(function(d, i) {
+        if (d == 0) {
+          return i;
+        }
+        return undefined;
+      })
+      .filter(function(d) {
+        return d != undefined;
+      });
 
+    nonSelectPaths = svg.selectAll("g.group path")
+      .filter(function(g, i) {
+        return ($.inArray(i, nonSelectIndexes) > -1);
+      });
 
-
+      console.log(nonSelectPaths);
+    // Actions
     notSelected
       .transition()
       .style({
         "opacity": opacity
       });
 
-  }
+   nonSelectPaths 
+      .transition()
+      .style({
+        "opacity": opacity
+      });
+  };
 }
 
 
@@ -71,8 +91,8 @@ $.getJSON(url, function(data) {
       return fill(d.index);
     })
     .attr("d", arc)
-    .on("mouseover", fadeChords(0))
-    .on("mouseout", fadeChords(1));
+    .on("mouseover", fadeChords(0, data))
+    .on("mouseout", fadeChords(1, data));
 
 
   svg.append("g")
