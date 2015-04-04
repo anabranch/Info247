@@ -1,6 +1,6 @@
 var url = "/data/matrix.json",
-  height = 800;
-var width = 800;
+  height = 600;
+var width = 600;
 
 // Colors Can be substituted to preference, in many ways less colors makes it nice...
 var colorRange = ["#1a9850", "#d73027", "#fc8d59", "#fee08b", "#ffffbf", "#d9ef8b", "#91cf60"];
@@ -9,6 +9,8 @@ var fill = d3.scale.ordinal()
   .range(colorRange);
 
 var fill = d3.scale.category20b();
+
+
 
 var outerRadius = Math.min(width, height) / 2 - 8,
   innerRadius = outerRadius - 30;
@@ -23,16 +25,28 @@ var svg = d3.select('#chart')
   .attr('height', height)
   .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-
 function fadeChords(opacity) {
   return function(g, i) {
+    var selected, notSelected, selectedStyles, SelectedFilter;
 
-    var sources = svg.selectAll("g.chord path")
+    selected = svg.selectAll("g.chord path")
+      .filter(function(d) {
+        return d.source.index == i || d.target.index == i;
+      });
+
+    notSelected = svg.selectAll("g.chord path")
       .filter(function(d) {
         return d.source.index != i && d.target.index != i;
-      })
+      });
+
+
+
+
+    notSelected
       .transition()
-      .style("opacity", opacity);
+      .style({
+        "opacity": opacity
+      });
 
   }
 }
@@ -45,7 +59,7 @@ $.getJSON(url, function(data) {
 
   svg.append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-    .attr("class", "groups animate")
+    .attr("class", "group animate")
     .selectAll("path")
     .data(layout.groups)
     .enter()
@@ -57,7 +71,7 @@ $.getJSON(url, function(data) {
       return fill(d.index);
     })
     .attr("d", arc)
-    .on("mouseover", fadeChords(0.05))
+    .on("mouseover", fadeChords(0))
     .on("mouseout", fadeChords(1));
 
 
