@@ -1,6 +1,6 @@
 var url = "/data/matrix.json",
-  height = 600;
-var width = 600;
+  height = 627;
+var width = 627;
 
 // Colors Can be substituted to preference, in many ways less colors makes it nice...
 var colorRange = ["#1a9850", "#d73027", "#fc8d59", "#fee08b", "#ffffbf", "#d9ef8b", "#91cf60"];
@@ -9,8 +9,6 @@ var fill = d3.scale.ordinal()
   .range(colorRange);
 
 var fill = d3.scale.category20b();
-
-
 
 var outerRadius = Math.min(width, height) / 2 - 8,
   innerRadius = outerRadius - 30;
@@ -25,9 +23,11 @@ var svg = d3.select('#chart')
   .attr('height', height)
   .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-function fadeChords(opacity, data) {
+function fadeChords(opacity, layout) {
   return function(g, i) {
-    var selected, notSelected, nonSelectIndexes;
+    var selected, notSelected, sourceNodes = [],
+      targetNodes = [],
+      excludedNodes, groups;
 
     selected = svg.selectAll("g.chord path")
       .filter(function(d) {
@@ -38,64 +38,52 @@ function fadeChords(opacity, data) {
       .filter(function(d) {
         return d.source.index != i && d.target.index != i;
       });
-
-
-    nonSelectIndexes = [];
-
-    svg.selectAll("g.chord path")
-      .filter(function(d) {
-        return d.source.index != i && d.target.index == i;
-      })
-      .each(function(d) {
-          nonSelectIndexes.push(d.source.index);
-        }
-      );
-
-
-    svg.selectAll("g.chord path")
-      .filter(function(d) {
-        return d.source.index == i && d.target.index != i;
-      })
-      .each(function(d) {
-          nonSelectIndexes.push(d.target.index);
-        }
-      );
-
-
-    // nonSelectIndexes = data[i]
-    //   .map(function(d, i) {
-    //     if (d == 0) {
-    //       return i;
-    //     }
-    //     return undefined;
-    //   })
-    //   .filter(function(d) {
-    //     return d != undefined;
-    //   });
-
-
-
-
-
-    nonSelectPaths = svg.selectAll("g.group path")
-      .filter(function(g, i) {
-        return ($.inArray(i, nonSelectIndexes) > -1);
-      });
-
-    console.log(nonSelectPaths);
-    // Actions
+ // Turn off the irrelevant paths
     notSelected
       .transition()
       .style({
         "opacity": opacity
       });
 
-    // nonSelectPaths
-    //   .transition()
-    //   .style({
-    //     "opacity": opacity
-    //   });
+    // is our node targeting this node?
+    selected.each(function(d) {
+      var temp = d.source.index == i ? sourceNodes.push(d.target.index) : undefined;
+    });
+
+    // is the node targeting our source node?
+    selected.each(function(d) {
+      var temp = d.target.index == i ? targetNodes.push(d.source.index) : undefined;
+    });
+
+
+    excludedNodes = sourceNodes.concat(targetNodes, [i]);
+
+    console.log(excludedNodes);
+
+    groups = svg.selectAll("g.group path")
+      .filter(function(d, count) {
+        return !($.inArray(count, excludedNodes) > -1);
+      });
+
+    console.log(groups);
+
+    groups
+      .transition()
+      .style({
+        "opacity": opacity
+      });
+
   };
+}
+
+function genSubChart(matrix) {
+  var width = 297,
+    height = 297;
+  var outerRadius = Math.min(width, height) / 2 - 8,
+    innerRadius = outerRadius - 30;
+  var arc = d3.svg.arc()
+    .innerRadius(innerRadius)
+    .outerRadius(outerRadius);
 }
 
 
@@ -118,8 +106,8 @@ $.getJSON(url, function(data) {
       return fill(d.index);
     })
     .attr("d", arc)
-    .on("mouseover", fadeChords(0, data))
-    .on("mouseout", fadeChords(1, data));
+    .on("mouseover", fadeChords(0, layout))
+    .on("mouseout", fadeChords(1, layout));
 
 
   svg.append("g")
