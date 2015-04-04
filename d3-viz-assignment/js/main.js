@@ -39,23 +39,50 @@ function fadeChords(opacity, data) {
         return d.source.index != i && d.target.index != i;
       });
 
-    nonSelectIndexes = data[i]
-      .map(function(d, i) {
-        if (d == 0) {
-          return i;
-        }
-        return undefined;
-      })
+
+    nonSelectIndexes = [];
+
+    svg.selectAll("g.chord path")
       .filter(function(d) {
-        return d != undefined;
-      });
+        return d.source.index != i && d.target.index == i;
+      })
+      .each(function(d) {
+          nonSelectIndexes.push(d.source.index);
+        }
+      );
+
+
+    svg.selectAll("g.chord path")
+      .filter(function(d) {
+        return d.source.index == i && d.target.index != i;
+      })
+      .each(function(d) {
+          nonSelectIndexes.push(d.target.index);
+        }
+      );
+
+
+    // nonSelectIndexes = data[i]
+    //   .map(function(d, i) {
+    //     if (d == 0) {
+    //       return i;
+    //     }
+    //     return undefined;
+    //   })
+    //   .filter(function(d) {
+    //     return d != undefined;
+    //   });
+
+
+
+
 
     nonSelectPaths = svg.selectAll("g.group path")
       .filter(function(g, i) {
         return ($.inArray(i, nonSelectIndexes) > -1);
       });
 
-      console.log(nonSelectPaths);
+    console.log(nonSelectPaths);
     // Actions
     notSelected
       .transition()
@@ -63,11 +90,11 @@ function fadeChords(opacity, data) {
         "opacity": opacity
       });
 
-   nonSelectPaths 
-      .transition()
-      .style({
-        "opacity": opacity
-      });
+    // nonSelectPaths
+    //   .transition()
+    //   .style({
+    //     "opacity": opacity
+    //   });
   };
 }
 
