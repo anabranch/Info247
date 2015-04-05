@@ -30,16 +30,22 @@ $.get("/data/airports.csv", function(airports) {
   d3.json("/data/matrix.json", function(matrix) {
     layout.matrix(matrix);
 
-    groups.selectAll('path')
-      .data(layout.groups)
+    var dataGroups = groups.selectAll('path')
+     .data(layout.groups);
+
+    var dataChords = chords.selectAll('path')
+      .data(layout.chords);
+
+    dataGroups
       .enter()
       .append('path')
       .attr("d", arc);
 
-    chords.selectAll('path')
-    .data(layout.chords)
+    dataChords
       .enter()
       .append('path')
       .attr("d", d3.svg.chord().radius(innerRadius));
+
+    svg.selectAll("g.chords path").data(layout.chords().slice(0, 100)).exit().remove();
   });
 });
