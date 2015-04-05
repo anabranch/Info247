@@ -83,6 +83,7 @@ function genSubChart(matrix) {
     .innerRadius(innerRadius)
     .outerRadius(outerRadius);
 
+  d3.select('#subchart').html("");
 
   var svg = d3.select('#subchart')
     .append('svg')
@@ -90,6 +91,35 @@ function genSubChart(matrix) {
     .attr('height', height)
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+  var layout = d3.layout.chord()
+    .padding(0.02)
+    .matrix(matrix);
+
+  svg.append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+    .attr("class", "group animate")
+    .selectAll("path")
+    .data(layout.groups)
+    .enter()
+    .append("path")
+    .style("fill", function(d) {
+      return fill(d.index);
+    })
+    .style("stroke", function(d) {
+      return fill(d.index);
+    })
+    .attr("d", arc);
+
+  svg.append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+    .attr("class", "chord animate")
+    .selectAll("path")
+    .data(layout.chords)
+    .enter().append("path")
+    .style("fill", function(d) {
+      return fill(d.target.index);
+    })
+    .attr("d", d3.svg.chord().radius(innerRadius));
 }
 
 function filterMatrix(nodes, matrix) {
@@ -128,7 +158,7 @@ function airportClick(matrix) {
 
     includedNodes = sourceNodes.concat(targetNodes, [i]);
 
-    console.log(filterMatrix(includedNodes, matrix));
+    genSubChart(filterMatrix(includedNodes, matrix));
 
   }
 }
