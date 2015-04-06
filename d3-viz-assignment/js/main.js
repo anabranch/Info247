@@ -90,7 +90,7 @@ function renderText() {
   colorText();
 }
 
-function colorText(){
+function colorText() {
 
   d3.select("#info").selectAll("div")
     .style("color", 'black');
@@ -128,7 +128,9 @@ function render() {
     .enter()
     .append('path')
     .attr("d", arc)
-    .on("mouseover", highlightText)
+    .on("mouseover.ht", highlightText)
+    .on("mouseover.fd", fade(0.1))
+    .on("mouseout", fade(1))
     .on("click", groupClick)
     .style("fill", function(d, i) {
       return fill(d.index);
@@ -161,6 +163,17 @@ function getIncludedChords(origin) {
   });
 
   return _.uniq(asSource.concat(asTarget));
+}
+
+function fade(opacity) {
+  return function(g, i) {
+    svg.selectAll("g.chords path")
+      .filter(function(d) {
+        return d.source.index != i && d.target.index != i;
+      })
+      .transition()
+      .style("opacity", opacity);
+  };
 }
 
 function getIncludedGroups(chords, origin) {
