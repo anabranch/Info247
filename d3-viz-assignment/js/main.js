@@ -1,7 +1,8 @@
 var height = 627,
   width = 627,
   originalMatrix,
-  layout;
+  layout,
+  airports;
 
 var outerRadius = Math.min(width, height) / 2 - 8,
   innerRadius = outerRadius - 30;
@@ -30,7 +31,7 @@ function generateLayout() {
 }
 
 //////////////////////////////////////////////////
-// Now Creating Functions
+// Utility Functions
 //////////////////////////////////////////////////
 
 function filterMatrix(nodes, matrix) {
@@ -46,6 +47,24 @@ function filterArray(nodes, array) {
     return ($.inArray(i, nodes) > -1);
   });
 }
+
+//////////////////////////////////////////////////
+// Info Functions
+//////////////////////////////////////////////////
+
+function renderTable() {
+  console.log(airports);
+  var tableData = d3.select("#info").selectAll("tr")
+    .data(airports)
+    .enter().append("tr")
+    .text(function(d) {
+      return d;
+    });
+}
+
+//////////////////////////////////////////////////
+// Visualization Functions
+//////////////////////////////////////////////////
 
 function getIncludedChords(origin) {
   var asSource = layout.chords().filter(function(d, ind) {
@@ -81,28 +100,23 @@ function groupClick(g, i) {
   var newMatrix = filterMatrix(includedGroups, originalMatrix);
   layout = generateLayout();
   layout.matrix([]);
-  draw();
+  render();
 
   setTimeout(function() {
-
     layout = generateLayout();
     layout.matrix(newMatrix);
-
-    draw();
-  }, 500);
-
-
-
+    render();
+  }, 1000);
 }
 
-
-
-function draw() {
+function render() {
   var dataGroups = groups.selectAll('path')
     .data(layout.groups);
 
   var dataChords = chords.selectAll('path')
     .data(layout.chords);
+
+  renderTable();
 
   var enterGroups = dataGroups
     .enter()
@@ -123,12 +137,13 @@ function draw() {
 //////////////////////////////////////////////////
 // Initialization
 //////////////////////////////////////////////////
-$.get("/data/airports.csv", function(airports) {
-  airports = airports.split("\n");
+
+$.get("/data/airports.csv", function(raw_airports) {
   d3.json("/data/matrix.json", function(matrix) {
     layout = generateLayout();
     layout.matrix(matrix);
     originalMatrix = matrix;
-    draw();
+    airports = raw_airports.split("\n");
+    render();
   });
 });

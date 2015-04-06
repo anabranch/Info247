@@ -12,7 +12,12 @@
   <div class='container'>
     <div class='row'>
       <div class='twelve columns'>
-        <h1>D3 Starter Template</h1>
+      <h1>June 1994 Flight Data</h1>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='twelve columns'>
+        <p>The below visualization contains data about the flights that happened in June 1994. Clicking on one of the edge nodes will change the visualization to only include that airport and any flights that go in and out of that airport. Due to a high number of flights and a relatively large dataset, colors are not shown until you dive deeply enough into the dataset(less 60 items).
       </div>
     </div>
     <div class='row'>
@@ -20,7 +25,15 @@
         <div id='chart'></div>
       </div>
       <div class='four columns'>
-        <div id='subchart'></div>
+        <table class='u-full-width'>
+          <thead>
+            <tr>
+              <th>Name</th>
+            </tr>
+         </thead>
+         <tbody id='info'>
+         </tbody>
+        </table>
       </div>
     </div>
   </div>
