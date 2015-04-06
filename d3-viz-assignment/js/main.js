@@ -62,7 +62,6 @@ function resetAll() {
     layout.matrix(originalMatrix);
     airports = originalAirports;
     render();
-
   }, 100);
 }
 
@@ -86,7 +85,21 @@ function renderText() {
       return d + " ";
     });
 
-  tableData.exit().transition().remove();
+  tableData.exit().remove();
+
+  colorText();
+}
+
+function colorText(){
+
+  d3.select("#info").selectAll("div")
+    .style("color", 'black');
+
+
+  d3.select("#info").selectAll("div")
+    .style("color", function(d, i) {
+      return fill(i);
+    });
 }
 
 function highlightText(g, index) {
@@ -116,12 +129,18 @@ function render() {
     .append('path')
     .attr("d", arc)
     .on("mouseover", highlightText)
-    .on("click", groupClick);
+    .on("click", groupClick)
+    .style("fill", function(d, i) {
+      return fill(d.index);
+    });
 
   var enterChords = dataChords
     .enter()
     .append('path')
-    .attr("d", d3.svg.chord().radius(innerRadius));
+    .attr("d", d3.svg.chord().radius(innerRadius))
+    .style("fill", function(d, i) {
+      return fill(d.target.index);
+    });
 
   dataGroups.exit().remove();
   dataChords.exit().remove();
@@ -152,7 +171,7 @@ function getIncludedGroups(chords, origin) {
     return d.target.index === origin ? d.source.index : undefined;
   });
 
-  return _.uniq(targets.concat(sources).filter(function(d) {
+  return _.uniq(targets.concat(sources, [origin]).filter(function(d) {
     return d !== undefined;
   }));
 }
@@ -163,6 +182,8 @@ function groupClick(g, i) {
   var includedChords = getIncludedChords(i);
   var includedGroups = getIncludedGroups(includedChords, i);
 
+  console.log("Number of Groups => " + includedGroups.length);
+  console.log(includedGroups);
   airports = airports
     .map(function(d, ind) {
       return ($.inArray(ind, includedGroups) > -1) ? d : undefined;
@@ -199,6 +220,8 @@ $.get("/data/airports.csv", function(raw_originalAirports) {
     matrix = originalMatrix;
     originalAirports = raw_originalAirports.split("\n");
     airports = originalAirports;
+    console.log(airports.length);
+    console.log(matrix.length);
     render();
   });
 });
