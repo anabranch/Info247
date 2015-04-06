@@ -1,11 +1,15 @@
 var height = 627,
   width = 627,
   originalMatrix,
+  matrix,
   layout,
+  originalAirports,
   airports;
 
 var outerRadius = Math.min(width, height) / 2 - 8,
   innerRadius = outerRadius - 30;
+
+var fill = d3.scale.category20b();
 
 var arc = d3.svg.arc()
   .innerRadius(innerRadius)
@@ -48,18 +52,80 @@ function filterArray(nodes, array) {
   });
 }
 
+function resetAll() {
+  layout = generateLayout();
+  layout.matrix([]);
+  render();
+
+  setTimeout(function() {
+    layout = generateLayout();
+    layout.matrix(originalMatrix);
+    airports = originalAirports;
+    render();
+
+  }, 100);
+}
+
 //////////////////////////////////////////////////
-// Info Functions
+// Render Functions
 //////////////////////////////////////////////////
 
-function renderTable() {
-  console.log(airports);
-  var tableData = d3.select("#info").selectAll("tr")
-    .data(airports)
-    .enter().append("tr")
-    .text(function(d) {
+function renderText() {
+  var tableData = d3.select("#info").selectAll("div")
+    .data(airports, function(d) {
       return d;
     });
+
+  tableData
+    .enter().append("div")
+    .style({
+      "float": "left",
+      "width": "50px"
+    })
+    .text(function(d) {
+      return d + " ";
+    });
+
+  tableData.exit().transition().remove();
+}
+
+function highlightText(g, index) {
+
+  d3.select("#info").selectAll("div")
+    .filter(function(d, i) {
+      return i === index;
+    })
+    .style("font-weight", "bold");
+
+  d3.select("#info").selectAll("div")
+    .filter(function(d, i) {
+      return i !== index;
+    })
+    .style("font-weight", "normal");
+}
+
+function render() {
+  var dataGroups = groups.selectAll('path')
+    .data(layout.groups);
+
+  var dataChords = chords.selectAll('path')
+    .data(layout.chords);
+
+  var enterGroups = dataGroups
+    .enter()
+    .append('path')
+    .attr("d", arc)
+    .on("mouseover", highlightText)
+    .on("click", groupClick);
+
+  var enterChords = dataChords
+    .enter()
+    .append('path')
+    .attr("d", d3.svg.chord().radius(innerRadius));
+
+  dataGroups.exit().remove();
+  dataChords.exit().remove();
+  renderText();
 }
 
 //////////////////////////////////////////////////
@@ -97,7 +163,17 @@ function groupClick(g, i) {
   var includedChords = getIncludedChords(i);
   var includedGroups = getIncludedGroups(includedChords, i);
 
-  var newMatrix = filterMatrix(includedGroups, originalMatrix);
+  airports = airports
+    .map(function(d, ind) {
+      return ($.inArray(ind, includedGroups) > -1) ? d : undefined;
+    })
+    .filter(function(d) {
+      return d !== undefined;
+    });
+
+
+  var newMatrix = filterMatrix(includedGroups, matrix);
+  matrix = newMatrix;
   layout = generateLayout();
   layout.matrix([]);
   render();
@@ -106,44 +182,23 @@ function groupClick(g, i) {
     layout = generateLayout();
     layout.matrix(newMatrix);
     render();
-  }, 1000);
+  }, 100);
 }
 
-function render() {
-  var dataGroups = groups.selectAll('path')
-    .data(layout.groups);
-
-  var dataChords = chords.selectAll('path')
-    .data(layout.chords);
-
-  renderTable();
-
-  var enterGroups = dataGroups
-    .enter()
-    .append('path')
-    .attr("d", arc)
-    .on("click", groupClick);
-
-  var enterChords = dataChords
-    .enter()
-    .append('path')
-    .attr("d", d3.svg.chord().radius(innerRadius));
-
-  dataGroups.exit().transition().remove();
-  dataChords.exit().transition().remove();
-}
 
 
 //////////////////////////////////////////////////
 // Initialization
 //////////////////////////////////////////////////
 
-$.get("/data/airports.csv", function(raw_airports) {
-  d3.json("/data/matrix.json", function(matrix) {
+$.get("/data/airports.csv", function(raw_originalAirports) {
+  d3.json("/data/matrix.json", function(data) {
     layout = generateLayout();
-    layout.matrix(matrix);
-    originalMatrix = matrix;
-    airports = raw_airports.split("\n");
+    layout.matrix(data);
+    originalMatrix = data;
+    matrix = originalMatrix;
+    originalAirports = raw_originalAirports.split("\n");
+    airports = originalAirports;
     render();
   });
 });
